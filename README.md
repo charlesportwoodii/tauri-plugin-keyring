@@ -8,7 +8,7 @@ This plugin provides cross-platform keyring/keychain access for Tauri applicatio
 
 | Platform | Support |
 |----------|---------|
-| Linux    | X       |
+| Linux    | ✓       |
 | Windows  | ✓       |
 | macOS    | ✓       |
 | Android  | ✓       |
@@ -19,6 +19,7 @@ This plugin provides cross-platform keyring/keychain access for Tauri applicatio
 - **Windows**: Uses Windows Credential Manager with hardware-backed security when available
 - **macOS/iOS**: Leverages Apple Keychain Services with Secure Enclave support
 - **Android**: Uses Android Keystore system with hardware security module backing
+- **Linux**: Uses dbus-secret-service by default, but keyutils is also available
 - **Cross-platform**: Unified API with platform-specific optimizations
 
 ## Install
@@ -75,7 +76,7 @@ Then, grant the plugin the necessary permissions in your capabilities configurat
     "core:default",
     "keyring:allow-initialize-keyring",
     "keyring:allow-set-password",
-    "keyring:allow-get-password", 
+    "keyring:allow-get-password",
     "keyring:allow-delete-password",
     "keyring:allow-has-password",
     "keyring:allow-set-secret",
@@ -141,14 +142,14 @@ async fn store_user_token(app: tauri::AppHandle, user_id: String, token: String)
     // Initialize keyring for your service
     app.keyring().initialize_service("com.example.myapp".to_string())
         .map_err(|e| e.to_string())?;
-    
+
     // Store the token securely
     app.keyring().set(
         &user_id,
         tauri_plugin_keyring::CredentialType::Password,
         tauri_plugin_keyring::CredentialValue::Password(token)
     ).map_err(|e| e.to_string())?;
-    
+
     Ok(())
 }
 
