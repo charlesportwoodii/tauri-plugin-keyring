@@ -26,8 +26,8 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
 
   #[cfg(target_os = "ios")]
   {
-    use apple_native_keyring_store::keychain::Store as MacOSStore;
-    let store = MacOSStore::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
+    use apple_native_keyring_store::protected::Store as IOSStore;
+    let store = IOSStore::new().map_err(|e| crate::Error::PlatformError(e.to_string()))?;
     keyring_core::set_default_store(store);
     let handle = api.register_ios_plugin(init_plugin_keyring)?;
     Ok(Keyring(handle))
