@@ -18,6 +18,6 @@ class KeyringPlugin: Plugin {
 }
 
 @_cdecl("init_plugin_keyring")
-func initPlugin() -> Plugin {
+public func initPlugin() -> Plugin {
   return KeyringPlugin()
 }
